@@ -1,15 +1,19 @@
+@tailwindcss preflight;
+@tailwind utilities;
+@tailwind utilities;
+
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  /* White & Blue theme (light)") */
+  --text: #334155; /* slate-700 */
+  --text-h: #0f172a; /* slate-900 */
+  --bg: #ffffff;
+  --border: #e6eef8; /* very light blue */
+  --code-bg: #f1f8ff; /* pale blue surface */
+  --accent: #1e40af; /* blue-800 primary */
+  --accent-bg: rgba(30, 64, 175, 0.08);
+  --accent-border: rgba(30, 64, 175, 0.16);
+  --social-bg: rgba(235, 246, 255, 0.6);
+  --shadow: rgba(2, 6, 23, 0.08) 0 10px 15px -3px, rgba(2,6,23,0.03) 0 4px 6px -2px;
 
   --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
   --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
@@ -32,17 +36,16 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+    --text: #cbd5e1; /* slate-300 */
+    --text-h: #f8fafc; /* near white */
+    --bg: #07132a; /* deep navy */
+    --border: #12263b;
+    --code-bg: #071826;
+    --accent: #60a5fa; /* blue-400 */
+    --accent-bg: rgba(96,165,250,0.06);
+    --accent-border: rgba(96,165,250,0.16);
+    --social-bg: rgba(10,18,30,0.5);
+    --shadow: rgba(2,6,23,0.6) 0 10px 15px -3px, rgba(2,6,23,0.4) 0 4px 6px -2px;
   }
 
   #social .button-icon {
@@ -50,10 +53,24 @@
   }
 }
 
+/* Class-based dark mode override (Tailwind `dark` class) */
+.dark :root {
+  --text: #cbd5e1;
+  --text-h: #f8fafc;
+  --bg: #07132a;
+  --border: #12263b;
+  --code-bg: #071826;
+  --accent: #60a5fa;
+  --accent-bg: rgba(96,165,250,0.06);
+  --accent-border: rgba(96,165,250,0.16);
+  --social-bg: rgba(10,18,30,0.5);
+  --shadow: rgba(2,6,23,0.6) 0 10px 15px -3px, rgba(2,6,23,0.4) 0 4px 6px -2px;
+}
+
 #root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
+  width: 100vw;
+  max-width: none;
+  margin: 0;
   text-align: center;
   border-inline: 1px solid var(--border);
   min-height: 100svh;
