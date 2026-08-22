@@ -5,22 +5,28 @@ import Header from './components/Header'
 import Canvas from './pages/Canvas'
 import Sidebar from './components/Sidebar'
 
-function App() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+interface SampleChangeEvent extends React.ChangeEvent<HTMLInputElement> { }
 
-// sidebarOpen={false} setSidebarOpen={handleSidebarOpen()}
+function App() {
+  const [sampleVal, setSampleVal] = useState(1);
+  const [sortTrigger, setSortTrigger] = useState(0);
+  const [generateTrigger, setGenerateTrigger] = useState(0);
+
+  const handleSampleChange = (event: SampleChangeEvent): void => {
+    setSampleVal(Number(event.target.value));
+  }
+
+  const handleRunSort = () => setSortTrigger(t => t + 1);
+
+  const handleGenerate = () => setGenerateTrigger(t => t + 1);
 
   return (
     <>
       <Header  />
-      <Sidebar />
-      <Canvas />
+      <Sidebar onSampleChange={handleSampleChange} sampleValue={sampleVal} onRunSort={handleRunSort} onGenerateArray={handleGenerate} />
+      <Canvas sortTrigger={sortTrigger} sampleValue={sampleVal} generateTrigger={generateTrigger} />
     </>
   )
-}
-
-function handleSidebarOpen(): Dispatch<SetStateAction<boolean>> {
-  throw new Error('Function not implemented.')
 }
 
 export default App

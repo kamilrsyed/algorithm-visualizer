@@ -1,29 +1,40 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type Item = { id: number; value: number };
 
-function Canvas() {
+interface CanvasProps {
+    sortTrigger: number;
+    generateTrigger: number
+    sampleValue: number;
+}
+
+function Canvas({ sortTrigger, sampleValue, generateTrigger }: CanvasProps) {
     const [items, setItems] = useState<Item[]>([]);
     const maxHeight = 450;
     const maxVal = Math.max(...items.map(i => i.value));
+
+    useEffect(() => {
+        const initialItems: Item[] = Array.from({ length: sampleValue }, (_, i) => ({ id: i + Date.now(), value: generateRandomNum(1, 50) }));
+        setItems(initialItems);
+    }, [generateTrigger]);
     
     useEffect(() => {
+        if (sortTrigger === 0) return;
+
         let cancelled = false;
-        const initialItems: Item[] = Array.from({ length: 50 }, (_, i) => ({ id: i + Date.now(), value: generateRandomNum(1, 50) }));
-        setItems(initialItems);
+        bubbleSort(items, setItems, () => cancelled);
+        // const run = async () => {
+        //     await delay(600);
+        //     if (cancelled) return;
+        //     await bubbleSort(initialItems, setItems, () => cancelled);
+        // };
 
-        const run = async () => {
-            await delay(600);
-            if (cancelled) return;
-            await bubbleSort(initialItems, setItems, () => cancelled);
-        };
-
-        run();
+        // run();
 
         return () => {
             cancelled = true;
         };
-    }, []);
+    }, [sortTrigger]);
 
     return (
         <>
@@ -32,7 +43,6 @@ function Canvas() {
                     <div className="text-center w-full">
                         <section className="w-full flex items-end justify-center gap-2.5 grow">
                             {
-                                
                                 items.map((item) => {
                                     const barHeight = maxVal > 0 ? (item.value / maxVal) * maxHeight : 0;
 
