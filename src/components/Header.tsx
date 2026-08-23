@@ -14,13 +14,10 @@ function Header() {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
                 </button>
-                <span className="pl-3 pr-3 font-medium text-xl">Header</span>
+                <span className="pl-3 pr-3 font-bold text-xl">Algorithm Visualizer</span>
             </div>
         </header>
     );
 }
 
 export default Header;
-
-// { sidebarOpen, setSidebarOpen }: HeaderProps
-// onClick={() => setSidebarOpen(!sidebarOpen)}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import type { AlgoOption } from "../interfaces/AlgoOption";
 import Dropdown from "./Dropdown";
 
 interface SampleChangeEvent extends React.ChangeEvent<HTMLInputElement> { }
@@ -8,11 +8,15 @@ interface SidebarProps {
     onSampleChange: (event: SampleChangeEvent) => void;
     onRunSort: () => void;
     onGenerateArray: () => void;
+    onSelectAlgorithm: (selected: AlgoOption) => void;
+    selectedAlgorithm: AlgoOption;
+    algos: AlgoOption[]
 }
 
-function Sidebar({ sampleValue, onSampleChange, onRunSort, onGenerateArray }: SidebarProps) {
+function Sidebar({ sampleValue, selectedAlgorithm, onSampleChange, onRunSort, onGenerateArray, onSelectAlgorithm, algos }: SidebarProps) {
     const sampleMin = 1;
-    const sampleMax = 50;
+    const sampleMax = 100;
+    const algorithms = algos;
 
     return (
         <>
@@ -33,8 +37,7 @@ function Sidebar({ sampleValue, onSampleChange, onRunSort, onGenerateArray }: Si
                         Generate
                     </button>
                 </div>
-                {/* <div className="mt-5 w-full max-w-xs rounded-lg font-mono p-1">
-                </div> */}
+
                 <div className="mt-5 w-full max-w-xs rounded-lg font-mono p-1">
                     <label className="flex text-gray-700 text-sm font-bold mb-1" htmlFor="unique-input">Sample Size</label>
                     <input
@@ -45,34 +48,7 @@ function Sidebar({ sampleValue, onSampleChange, onRunSort, onGenerateArray }: Si
                     />
                 </div>
                 <div className="mt-5 w-full max-w-xs rounded-lg font-mono p-1">
-                    <label className="flex text-gray-700 text-sm font-bold mb-1" htmlFor="unique-input">Sample Size</label>
-                    <input
-                        className="text-sm custom-input w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm transition duration-300 ease-in-out transform focus:outline-blue-300 hover:shadow-lg hover:border-blue-300 bg-gray-100"
-                        placeholder="Enter text here"
-                        type="text"
-                        id="unique-input"
-                    />
-                </div>
-                <div className="mt-5 w-full max-w-xs rounded-lg font-mono p-1">
-                    <label className="flex text-gray-700 text-sm font-bold mb-1" htmlFor="unique-input">Sample Size</label>
-                    <input
-                        className="text-sm custom-input w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm transition duration-300 ease-in-out transform focus:outline-blue-300 hover:shadow-lg hover:border-blue-300 bg-gray-100"
-                        placeholder="Enter text here"
-                        type="text"
-                        id="unique-input"
-                    />
-                </div>
-                <div className="mt-5 w-full max-w-xs rounded-lg font-mono p-1">
-                    <label className="flex text-gray-700 text-sm font-bold mb-1" htmlFor="unique-input">Sample Size</label>
-                    <input
-                        className="text-sm custom-input w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm transition duration-300 ease-in-out transform focus:outline-blue-300 hover:shadow-lg hover:border-blue-300 bg-gray-100"
-                        placeholder="Enter text here"
-                        type="text"
-                        id="unique-input"
-                    />
-                </div>
-                <div className="mt-5 w-full max-w-xs rounded-lg font-mono p-1">
-                    <Dropdown />
+                    <Dropdown optionsList={algorithms} selectedAlgorithm={selectedAlgorithm} onSelectAlgorithm={onSelectAlgorithm} />
                 </div>
                 <div className="mt-5 w-full max-w-xs rounded-lg font-mono p-1">
                     <button className="bg-blue-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-2 px-4 rounded-full" onClick={onRunSort}>

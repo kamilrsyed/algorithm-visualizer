@@ -1,0 +1,1 @@
+export type Item = { id: number; value: number, compared: boolean };

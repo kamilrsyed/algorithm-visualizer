@@ -1,20 +1,31 @@
-import { useEffect, useRef, useState } from "react";
+import { motion } from "motion/react";
+import { useEffect, useState } from "react";
+import type { AlgoOption } from "../interfaces/AlgoOption";
+import type { Item } from "../types/types";
+import { bubbleSort } from "../algorithms/BubbleSort";
 
-type Item = { id: number; value: number };
+
+export const Algorithms = {
+    Bubble: 'BUBBLE',
+    Insertion: 'INSERTION',
+    Selection: 'SELECTION'
+  };
 
 interface CanvasProps {
     sortTrigger: number;
     generateTrigger: number
     sampleValue: number;
+    selectedAlgorithm: AlgoOption
 }
 
-function Canvas({ sortTrigger, sampleValue, generateTrigger }: CanvasProps) {
+function Canvas({ sortTrigger, sampleValue, generateTrigger, selectedAlgorithm }: CanvasProps) {
     const [items, setItems] = useState<Item[]>([]);
+    
     const maxHeight = 450;
     const maxVal = Math.max(...items.map(i => i.value));
 
     useEffect(() => {
-        const initialItems: Item[] = Array.from({ length: sampleValue }, (_, i) => ({ id: i + Date.now(), value: generateRandomNum(1, 50) }));
+        const initialItems: Item[] = Array.from({ length: sampleValue }, (_, i) => ({ id: i + Date.now(), value: generateRandomNum(1, 50), compared: false }));
         setItems(initialItems);
     }, [generateTrigger]);
     
@@ -22,14 +33,17 @@ function Canvas({ sortTrigger, sampleValue, generateTrigger }: CanvasProps) {
         if (sortTrigger === 0) return;
 
         let cancelled = false;
-        bubbleSort(items, setItems, () => cancelled);
-        // const run = async () => {
-        //     await delay(600);
-        //     if (cancelled) return;
-        //     await bubbleSort(initialItems, setItems, () => cancelled);
-        // };
 
-        // run();
+        switch (selectedAlgorithm.code) {
+            case Algorithms.Bubble:
+                console.log('bubble sort recieved in canvas')
+                bubbleSort(items, setItems, () => cancelled);
+                break;
+        
+            default:
+                console.log('algo recieved in canvas: ', selectedAlgorithm.name);
+                break;
+        }
 
         return () => {
             cancelled = true;
@@ -41,19 +55,31 @@ function Canvas({ sortTrigger, sampleValue, generateTrigger }: CanvasProps) {
             <main className="fixed top-16 left-64 right-0 bottom-0 overflow-auto bg-skin-bg text-skin-text p-4">
                 <div className="w-full h-full flex items-center justify-center">
                     <div className="text-center w-full">
-                        <section className="w-full flex items-end justify-center gap-2.5 grow">
+                        <section className="w-full flex items-end justify-center gap-1 grow">
                             {
                                 items.map((item) => {
                                     const barHeight = maxVal > 0 ? (item.value / maxVal) * maxHeight : 0;
 
                                     return (
-                                        <div className="flex flex-col" key={item.id}>
-                                            <div
-                                                className="w-6 bg-blue-300 border border-blue-500 rounded"
-                                                style={{ height: `${barHeight}px`, transition: 'height 80ms linear' }}
+                                        <motion.div 
+                                            layout
+                                            transition={{ type: "spring", stiffness: 1000, damping: 40 }}
+                                            className="flex flex-col flex-1 min-w-0"
+                                            key={item.id} 
+                                            style={{ maxWidth: 24 }}
+                                        >
+                                            <motion.div
+                                                className="w-full border rounded"
+                                                initial={{ height: 0 }}
+                                                animate={{
+                                                    height: barHeight,
+                                                    backgroundColor: item.compared ? "#60a5fa" : "#E8E8E8",
+                                                    borderColor: item.compared ? "#3b82f6" : "#5C5C5C",
+                                                }}
+                                                transition={{ height: { duration: 0 }, backgroundColor: { duration: 0.15 } }}
                                             />
-                                            <span className="text-xs">{item.value}</span>
-                                        </div>
+                                            <span className="text-[10px]">{item.value}</span>
+                                        </motion.div>
                                     );
                                 })
                             }
@@ -67,33 +93,6 @@ function Canvas({ sortTrigger, sampleValue, generateTrigger }: CanvasProps) {
 
 function generateRandomNum(min: number, max: number) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-
-async function bubbleSort(arr: Item[], setArr: React.Dispatch<React.SetStateAction<Item[]>>, isCancelled: () => boolean) {
-    const copiedArr = [...arr];
-    let swapped = true;
-    while (swapped) {
-        swapped = false;
-        for (let i = 0; i < copiedArr.length - 1; i++) {
-            if (copiedArr[i].value > copiedArr[i + 1].value) {
-                if (isCancelled()) return;
-                swapped = true;
-                const tmp = copiedArr[i];
-                copiedArr[i] = copiedArr[i + 1];
-                copiedArr[i + 1] = tmp;
-                // only update state when an actual swap happens
-                setArr([...copiedArr]);
-                await delay(20);
-            }
-        }
-    }
-
-    if (!isCancelled()) setArr([...copiedArr]);
-}
-
-function delay(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 export default Canvas
