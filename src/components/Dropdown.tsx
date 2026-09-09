@@ -14,8 +14,8 @@ export default function Dropdown({ selectedAlgorithm, onSelectAlgorithm, options
     const defaultOption = algorithms.find((item) => item.name === 'Bubble Sort');
 
     return (
-        <Listbox as="div" className="relative inline-block w-full hover:cursor-pointer" value={selectedAlgorithm || defaultOption} onChange={onSelectAlgorithm}>
-            <ListboxButton className="inline-flex w-full justify-between gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 hover:bg-gray-50 hover:cursor-pointer">
+        <Listbox as="div" className="relative inline-block w-full hover:cursor-pointer shadow-sm hover:shadow-lg" value={selectedAlgorithm || defaultOption} onChange={onSelectAlgorithm}>
+            <ListboxButton className="inline-flex w-full justify-between gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm text-gray-900 shadow-xs ring-1 ring-gray-300 hover:cursor-pointer">
                 {selectedAlgorithm.name}
                 <ChevronDownIcon aria-hidden="true" className="-mr-1 h-5 w-5 text-gray-400" />
             </ListboxButton>

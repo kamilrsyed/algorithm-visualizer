@@ -7,6 +7,7 @@ import Sidebar from './components/Sidebar'
 import type { AlgoOption } from './interfaces/AlgoOption'
 
 export const algorithms: AlgoOption[] = [
+  { id: 0, name: 'Select', code: 'Select', unavailable: false },
   { id: 1, name: 'Bubble Sort', code: 'BUBBLE', unavailable: false },
   { id: 2, name: 'Selection Sort', code: 'SELECTION', unavailable: false },
   { id: 3, name: 'Insertion Sort', code: 'INSERTION', unavailable: false },
