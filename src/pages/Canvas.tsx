@@ -8,13 +8,14 @@ import BubbleSort from "../components/BubbleSort";
 import type { AlgoComponentProps } from "../interfaces/AlgoComponentProps";
 import SelectionSort from "../components/SelectionSort";
 import { selectionSort } from "../algorithms/SelectionSort";
+import { insertionSort } from "../algorithms/InsertionSort";
 
 
 export const Algorithms = {
     Bubble: 'BUBBLE',
     Insertion: 'INSERTION',
     Selection: 'SELECTION'
-  };
+};
 
 interface CanvasProps {
     sortTrigger: number;
@@ -49,6 +50,10 @@ function Canvas({ sortTrigger, sampleValue, generateTrigger, selectedAlgorithm }
                 break;
             case Algorithms.Selection:
                 selectionSort(items, setItems, () => cancelled);
+                setComponent(() => componentMap[selectedAlgorithm.code]);
+                break;
+            case Algorithms.Insertion:
+                insertionSort(items, setItems, () => cancelled);
                 setComponent(() => componentMap[selectedAlgorithm.code]);
                 break;
             default:

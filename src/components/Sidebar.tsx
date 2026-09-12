@@ -17,7 +17,7 @@ function Sidebar({ sampleValue, selectedAlgorithm, onSampleChange, onRunSort, on
     const sampleMin = 1;
     const sampleMax = 100;
     const algorithms = algos;
-    const algoSelected: boolean = selectedAlgorithm.id === 1 || selectedAlgorithm.id === 2;
+    const algoSelected: boolean = selectedAlgorithm.id === 1 || selectedAlgorithm.id === 2 || selectedAlgorithm.id === 3;
 
     return (
         <>
