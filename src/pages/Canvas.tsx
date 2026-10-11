@@ -9,12 +9,14 @@ import type { AlgoComponentProps } from "../interfaces/AlgoComponentProps";
 import SelectionSort from "../components/SelectionSort";
 import { selectionSort } from "../algorithms/SelectionSort";
 import { insertionSort } from "../algorithms/InsertionSort";
+import { mergeSort } from "../algorithms/MergeSort";
 
 
 export const Algorithms = {
     Bubble: 'BUBBLE',
     Insertion: 'INSERTION',
-    Selection: 'SELECTION'
+    Selection: 'SELECTION',
+    Merge: 'MERGE'
 };
 
 interface CanvasProps {
@@ -33,10 +35,10 @@ function Canvas({ sortTrigger, sampleValue, generateTrigger, selectedAlgorithm }
     const [Component, setComponent] = useState<React.ComponentType<AlgoComponentProps> | null>(null);
 
     useEffect(() => {
-        const initialItems: Item[] = Array.from({ length: sampleValue }, (_, i) => ({ id: i + Date.now(), value: generateRandomNum(1, 50), inComparison: false, sorted: false, currentMin: false }));
+        const initialItems: Item[] = Array.from({ length: sampleValue }, (_, i) => ({ id: i + Date.now(), value: generateRandomNum(1, 50), inComparison: false, sorted: false, currentMin: false, divideLevel: 0 }));
         setItems(initialItems);
     }, [generateTrigger]);
-    
+
     useEffect(() => {
         if (sortTrigger === 0) return;
 
@@ -53,9 +55,24 @@ function Canvas({ sortTrigger, sampleValue, generateTrigger, selectedAlgorithm }
                 setComponent(() => componentMap[selectedAlgorithm.code]);
                 break;
             case Algorithms.Insertion:
-                insertionSort(items, setItems, () => cancelled);
+                insertionSort(items, setItems, setSwaps, setCompares, () => cancelled);
                 setComponent(() => componentMap[selectedAlgorithm.code]);
                 break;
+            case Algorithms.Merge: {
+                setComponent(() => componentMap[selectedAlgorithm.code]);
+
+                const update = async (next: Item[]) => {
+                    if (cancelled) throw new Error("cancelled");
+                    setItems(next);
+                    await new Promise(r => setTimeout(r, 300));
+                    if (cancelled) throw new Error("cancelled");
+                };
+
+                mergeSort(items, update).catch(e => {
+                    if (e.message !== "cancelled") throw e;
+                });
+                break;
+            }
             default:
                 console.log('algo recieved in canvas: ', selectedAlgorithm.name);
                 break;
@@ -79,62 +96,34 @@ function Canvas({ sortTrigger, sampleValue, generateTrigger, selectedAlgorithm }
                             <Component items={items} maxVal={maxVal} maxHeight={maxHeight} />
                         ) : (
                             <section className="w-full flex items-end justify-center gap-1 grow">
-            {
-                items.map((item) => {
-                    const barHeight = maxVal > 0 ? (item.value / maxVal) * maxHeight : 0;
-                    return (
-                        <motion.div
-                            layout
-                            transition={{ type: "spring", stiffness: 1000, damping: 40 }}
-                            className="flex flex-col flex-1 min-w-0"
-                            key={item.id}
-                            style={{ maxWidth: 24 }}
-                        >
-                            <motion.div
-                                className="w-full border rounded"
-                                initial={{ height: 0 }}
-                                animate={{
-                                    height: barHeight,
-                                    backgroundColor: "#E8E8E8",
-                                    borderColor: "#5C5C5C",
-                                }}
-                                transition={{ height: { duration: 0 }, backgroundColor: { duration: 0.15 } }}
-                            />
-                            <span className="text-[10px]">{item.value}</span>
-                        </motion.div>
-                    );
-                })
-            }
-        </section>
-                        )}
-                        {/* <section className="w-full flex items-end justify-center gap-1 grow">
-                            {
-                                items.map((item) => {
-                                    const barHeight = maxVal > 0 ? (item.value / maxVal) * maxHeight : 0;
-                                    return (
-                                        <motion.div 
-                                            layout
-                                            transition={{ type: "spring", stiffness: 1000, damping: 40 }}
-                                            className="flex flex-col flex-1 min-w-0"
-                                            key={item.id} 
-                                            style={{ maxWidth: 24 }}
-                                        >
+                                {
+                                    items.map((item) => {
+                                        const barHeight = maxVal > 0 ? (item.value / maxVal) * maxHeight : 0;
+                                        return (
                                             <motion.div
-                                                className="w-full border rounded"
-                                                initial={{ height: 0 }}
-                                                animate={{
-                                                    height: barHeight,
-                                                    backgroundColor: item.sorted ? "#82C47E" : item.inComparison ? "#60a5fa" : "#E8E8E8",
-                                                    borderColor: item.sorted ? "#468F42" : item.inComparison ? "#3b82f6" : "#5C5C5C",
-                                                }}
-                                                transition={{ height: { duration: 0 }, backgroundColor: { duration: 0.15 } }}
-                                            />
-                                            <span className="text-[10px]">{item.value}</span>
-                                        </motion.div>
-                                    );
-                                })
-                            }
-                        </section> */}
+                                                layout
+                                                transition={{ type: "spring", stiffness: 1000, damping: 40 }}
+                                                className="flex flex-col flex-1 min-w-0"
+                                                key={item.id}
+                                                style={{ maxWidth: 24 }}
+                                            >
+                                                <motion.div
+                                                    className="w-full border rounded"
+                                                    initial={{ height: 0 }}
+                                                    animate={{
+                                                        height: barHeight,
+                                                        backgroundColor: "#E8E8E8",
+                                                        borderColor: "#5C5C5C",
+                                                    }}
+                                                    transition={{ height: { duration: 0 }, backgroundColor: { duration: 0.15 } }}
+                                                />
+                                                <span className="text-[10px]">{item.value}</span>
+                                            </motion.div>
+                                        );
+                                    })
+                                }
+                            </section>
+                        )}
                     </div>
                 </div>
             </main>

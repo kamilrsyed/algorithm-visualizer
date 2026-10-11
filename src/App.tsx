@@ -11,7 +11,7 @@ export const algorithms: AlgoOption[] = [
   { id: 1, name: 'Bubble Sort', code: 'BUBBLE', unavailable: false },
   { id: 2, name: 'Selection Sort', code: 'SELECTION', unavailable: false },
   { id: 3, name: 'Insertion Sort', code: 'INSERTION', unavailable: false },
-  { id: 4, name: 'Merge Sort', code: 'MERGE', unavailable: true },
+  { id: 4, name: 'Merge Sort', code: 'MERGE', unavailable: false },
   { id: 5, name: 'Quick Sort', code: 'QUICK', unavailable: true },
   { id: 6, name: 'Heap Sort', code: 'HEAP', unavailable: true },
 ]
